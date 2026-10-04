@@ -45,6 +45,7 @@ O caminho mais fácil para tudo abaixo é o [painel](docs/PAINEL.md). A tabela m
 | Textos "Sobre", trocas e privacidade | `site/js/config.js` (final do arquivo) | [Guia de edição](docs/GUIA-DE-EDICAO.md#7-textos-institucionais) |
 | Cores do site | `site/css/estilo.css` → bloco `:root` | [Guia de edição](docs/GUIA-DE-EDICAO.md#8-cores-e-fontes) |
 | Título no Google / prévia no WhatsApp | `site/index.html` (topo) | [Publicar](docs/PUBLICAR.md#google-e-prévia-do-link) |
+| ✅ O que falta antes de mostrar ao cliente | — | [Checklist de lançamento](docs/CHECKLIST-LANCAMENTO.md) |
 | Nota fiscal (o que o site coleta e como emitir) | Painel → Pedidos e pagamento | [Nota fiscal](docs/NOTA-FISCAL.md) |
 | Pagamento pelo site (futuro) | `site/js/pedido.js` → `FINALIZADORES` | [Pagamentos](docs/PAGAMENTOS-FUTURO.md) |
 
