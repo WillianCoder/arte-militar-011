@@ -20,8 +20,8 @@ window.LOJA = {
   "slogan": "Artigos militares, táticos e de aventura",
   "descricao": "Coturnos, fardas, equipamentos táticos, mochilas e itens de camping. Loja física em São Paulo e envio para todo o Brasil. Pedidos pelo WhatsApp.",
   "contato": {
-    "whatsapp": "5511900000000",
-    "whatsappExibicao": "(11) 90000-0000",
+    "whatsapp": "5511911482873",
+    "whatsappExibicao": "(11) 91148-2873",
     "telefone": "1130000000",
     "telefoneExibicao": "(11) 3000-0000",
     "email": "contato@artemilitar011.com.br",
