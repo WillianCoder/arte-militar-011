@@ -77,6 +77,7 @@ window.LOJA = {
       "Dinheiro (na retirada)"
     ],
     "descontoPix": 5,
+    "linkDosProdutos": false,
     "avisoTopo": "Enviamos para todo o Brasil • Retire grátis na loja física • Pedidos pelo WhatsApp"
   },
   "banners": [

@@ -843,7 +843,8 @@
     $("#comprar-whats").addEventListener("click", function () {
       var texto;
       if (p.disponivel === false) {
-        texto = "Olá! Quero ser avisado quando o produto *" + p.nome + "* chegar.\n" + urlDoProduto(p);
+        texto = "Olá! Quero ser avisado quando o produto *" + p.nome + "* (cód. " + (p.codigo || p.id) + ") chegar." +
+          (LOJA.pedidos.linkDosProdutos ? "\n" + urlDoProduto(p) : "");
       } else {
         if (!validar()) return;
         texto = PD.mensagemProduto(p, est.selecao, est.qtd, LOJA, urlDoProduto(p));

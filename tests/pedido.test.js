@@ -16,6 +16,7 @@ const LOJA = {
   pedidos: {
     prefixo: "AM011",
     descontoPix: 5,
+    linkDosProdutos: true,
     entregas: [
       { id: "retirada", nome: "Retirar na loja física", detalhe: "" },
       { id: "envio", nome: "Envio pelos Correios / transportadora", detalhe: "" }
@@ -173,4 +174,25 @@ test("link do WhatsApp usa só os números e codifica o texto", () => {
   const fin = PD.FINALIZADORES.whatsapp(PD.montarPedido(dadosValidos(), PRODUTOS, LOJA), LOJA);
   assert.equal(fin.tipo, "redirecionar");
   assert.ok(fin.url.startsWith("https://wa.me/" + LOJA.contato.whatsapp + "?text="));
+});
+
+test("sem a opção linkDosProdutos, a mensagem não leva nenhum link do site", () => {
+  const loja = JSON.parse(JSON.stringify(LOJA));
+  loja.pedidos.linkDosProdutos = false;
+  const d = dadosValidos();
+  d.urlBase = "https://williancoder.github.io/arte-militar-011/";
+  const msg = PD.mensagemPedido(PD.montarPedido(d, PRODUTOS, loja), loja);
+  assert.doesNotMatch(msg, /https?:\/\//);
+  assert.match(msg, /Cód\. VES-007/);
+  const unico = PD.mensagemProduto(PRODUTOS[0], {}, 1, loja, "https://williancoder.github.io/x");
+  assert.doesNotMatch(unico, /https?:\/\//);
+});
+
+test("catálogo real: mensagem não expõe o endereço provisório do GitHub", () => {
+  if (LOJA_REAL.pedidos.linkDosProdutos) return; // loja ligou os links de propósito
+  const d = dadosValidos();
+  d.urlBase = "https://williancoder.github.io/arte-militar-011/";
+  d.itens = [{ id: PRODUTOS_REAL[0].id, variacoes: {}, qtd: 1 }];
+  const msg = PD.mensagemPedido(PD.montarPedido(d, PRODUTOS_REAL, LOJA_REAL), LOJA_REAL);
+  assert.doesNotMatch(msg, /github/i);
 });

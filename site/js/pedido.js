@@ -168,7 +168,8 @@
     }, 0));
     var entrega = ((config.pedidos && config.pedidos.entregas) || []).find(function (e) { return e.id === dados.entrega; }) || null;
     var data = dados.data || new Date();
-    var base = dados.urlBase || config.urlSite || "";
+    // link de cada produto na mensagem: só quando a loja ligar a opção (ex.: com domínio próprio)
+    var base = config.pedidos && config.pedidos.linkDosProdutos ? dados.urlBase || config.urlSite || "" : "";
     return {
       numero: dados.numero || gerarNumero(config.pedidos && config.pedidos.prefixo, data),
       data: data.toISOString(),
@@ -305,7 +306,7 @@
     var v = textoVariacoes(variacoes);
     if (v) L.push(v);
     L.push(n + " un. x " + formatarPreco(produto.preco) + " = *" + formatarPreco(produto.preco * n) + "*");
-    if (urlProduto) L.push(urlProduto);
+    if (urlProduto && config.pedidos && config.pedidos.linkDosProdutos) L.push(urlProduto);
     L.push("", "Está disponível? Qual o frete para o meu CEP?");
     return L.join("\n");
   }

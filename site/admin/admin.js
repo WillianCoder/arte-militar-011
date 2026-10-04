@@ -1209,6 +1209,8 @@
       campo("Desconto no Pix (%)", "pedidos.descontoPix", { tipo: "numero", dica: "0 = sem desconto" }) +
       campo("Prefixo do número do pedido", "pedidos.prefixo", { dica: "Ex.: AM011 → pedido AM011-261004-4821" }) +
       campo("Faixa de aviso no topo do site", "pedidos.avisoTopo", { largo: true, dica: "Deixe vazio para esconder" }) +
+      '<label class="caixa campo--largo"><input type="checkbox" id="link-produtos"' + (p.linkDosProdutos ? " checked" : "") + "> Incluir o link de cada produto na mensagem do WhatsApp</label>" +
+      '<p class="dica campo--largo">Deixe desligado enquanto o site estiver no endereço provisório. Ligue quando tiver um endereço próprio (ex.: artemilitar011.com.br). O código do produto (ex.: CAL-001) vai sempre.</p>' +
       "</div></section>" +
       '<section class="bloco"><h2>' + icone("caminhao") + "Formas de entrega</h2>" +
       '<p class="dica">"Retirar na loja" não pede endereço; as outras pedem (com CEP automático).</p><ul class="adm-subs adm-subs--largo">' +
@@ -1229,6 +1231,10 @@
 
   ligacoes.pedidos = function (raiz) {
     var p = estado.loja.pedidos;
+    $("#link-produtos", raiz).addEventListener("change", function (e) {
+      p.linkDosProdutos = e.target.checked;
+      marcarMudanca(e.target.checked ? "Links dos produtos na mensagem: ligado" : "Links dos produtos na mensagem: desligado");
+    });
     $$("[data-e]", raiz).forEach(function (li) {
       var e = p.entregas[Number(li.dataset.e)];
       $$("[data-e-campo]", li).forEach(function (inp) {
