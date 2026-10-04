@@ -14,6 +14,7 @@
 .adm-ajuda { padding: 14px 16px; border-radius: var(--raio-p); background: var(--fundo); border: 1px dashed var(--linha-2); font-size: 14px; color: var(--texto-suave); }
 .adm-ajuda ol { margin: 10px 0; padding-left: 20px; display: grid; gap: 6px; }
 .adm-ajuda a { color: var(--coyote-forte); text-decoration: underline; word-break: break-all; }
+.adm-ajuda a.btn { color: #17190f; text-decoration: none; word-break: normal; margin: 2px 0 6px; }
 .adm-ajuda code { background: var(--superficie-2); padding: 1px 5px; border-radius: 4px; }
 
 /* ------------------------------ layout ------------------------------ */

@@ -19,7 +19,7 @@ O painel é onde você edita **tudo** do site sem mexer em código:
 ## Primeiro acesso: a chave (uma vez só)
 O painel grava direto no GitHub, então precisa de uma **chave de acesso** sua. Ela só consegue mexer no repositório da loja.
 
-1. Entre em **https://github.com/settings/personal-access-tokens/new** (logado na sua conta).
+1. Na tela de entrada do painel, toque em **Criar minha chave no GitHub** — abre o formulário já preenchido. (Ou entre em **https://github.com/settings/personal-access-tokens/new**, logado na sua conta.)
 2. **Token name:** `Painel Arte Militar 011` · **Expiration:** 1 ano (ou o prazo que preferir).
 3. **Repository access:** *Only select repositories* → escolha **arte-militar-011**.
 4. **Permissions** → *Repository permissions* → **Contents** → *Read and write*.

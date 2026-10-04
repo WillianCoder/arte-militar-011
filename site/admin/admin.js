@@ -298,10 +298,10 @@
       '<button class="btn btn--primario btn--grande campo--largo" type="submit">Entrar no painel</button>' +
       "</form>" +
       '<details class="adm-ajuda" open><summary>Como conseguir a chave (uma vez só)</summary><ol>' +
-      '<li>Abra <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com/settings/personal-access-tokens/new</a> (logado na sua conta).</li>' +
-      "<li><b>Token name:</b> Painel Arte Militar 011 · <b>Expiration:</b> 1 ano (ou o prazo que preferir).</li>" +
+      '<li><a class="btn btn--primario" href="' + esc(linkNovaChave(padrao)) + '" target="_blank" rel="noopener">Criar minha chave no GitHub</a><br>(abre o formulário já preenchido; entre na sua conta se pedir)</li>' +
+      "<li>Confira: <b>Token name</b> Painel Arte Militar 011 · <b>Expiration</b> 1 ano (preencha se vier vazio).</li>" +
       "<li><b>Repository access:</b> <i>Only select repositories</i> → escolha <b>" + esc(padrao.repo) + "</b>.</li>" +
-      "<li><b>Permissions → Repository permissions → Contents:</b> <i>Read and write</i>.</li>" +
+      "<li><b>Permissions → Repository permissions → Contents:</b> <i>Read and write</i> (confira).</li>" +
       "<li>Clique em <b>Generate token</b>, copie a chave (começa com <code>github_pat_</code>) e cole acima.</li>" +
       "</ol><p>A chave fica só neste navegador e só consegue mexer no repositório da loja. Se perder o celular/computador, apague a chave no mesmo endereço do GitHub.</p></details>" +
       "</div></div>";
@@ -322,6 +322,17 @@
       estado.conexao = conexao;
       iniciarPainel();
     });
+  }
+
+  /* Formulário de criação da chave já preenchido (nome, prazo e permissão) */
+  function linkNovaChave(repo) {
+    return "https://github.com/settings/personal-access-tokens/new?" + [
+      "name=" + encodeURIComponent("Painel Arte Militar 011"),
+      "description=" + encodeURIComponent("Acesso do painel administrativo da loja"),
+      "target_name=" + encodeURIComponent(repo.dono),
+      "expires_in=366",
+      "contents=write"
+    ].join("&");
   }
 
   function iniciarPainel() {
