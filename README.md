@@ -1,6 +1,6 @@
 # Arte Militar 011 — Loja virtual
 
-> ![Status](https://img.shields.io/badge/status-em%20desenvolvimento-f5c518) ![Versão](https://img.shields.io/badge/vers%C3%A3o-1.2.0-f5c518)
+> ![Status](https://img.shields.io/badge/status-em%20desenvolvimento-f5c518) ![Versão](https://img.shields.io/badge/vers%C3%A3o-1.3.0-f5c518)
 
 ## 📌 Sobre
 Site de vendas da **Arte Militar 011**: artigos militares, táticos e de aventura. O cliente navega pelo **painel lateral à esquerda**, escolhe tamanho e cor, monta o pedido e **envia tudo pronto para o WhatsApp Business** da loja. Tem página da **loja física com mapa**, contatos, perguntas frequentes e histórico de pedidos.
@@ -45,6 +45,7 @@ O caminho mais fácil para tudo abaixo é o [painel](docs/PAINEL.md). A tabela m
 | Textos "Sobre", trocas e privacidade | `site/js/config.js` (final do arquivo) | [Guia de edição](docs/GUIA-DE-EDICAO.md#7-textos-institucionais) |
 | Cores do site | `site/css/estilo.css` → bloco `:root` | [Guia de edição](docs/GUIA-DE-EDICAO.md#8-cores-e-fontes) |
 | Título no Google / prévia no WhatsApp | `site/index.html` (topo) | [Publicar](docs/PUBLICAR.md#google-e-prévia-do-link) |
+| Nota fiscal (o que o site coleta e como emitir) | Painel → Pedidos e pagamento | [Nota fiscal](docs/NOTA-FISCAL.md) |
 | Pagamento pelo site (futuro) | `site/js/pedido.js` → `FINALIZADORES` | [Pagamentos](docs/PAGAMENTOS-FUTURO.md) |
 
 > Dá para editar **direto no GitHub pelo navegador** (abra o arquivo → ícone de lápis → "Commit changes"). Em ~1 minuto o site se atualiza. Passo a passo no [guia de edição](docs/GUIA-DE-EDICAO.md#como-editar-pelo-github-sem-instalar-nada).
@@ -134,6 +135,7 @@ arte-militar-011/
 ├── meta.json / CHANGELOG.md
 ├── docs/
 │   ├── PAINEL.md           # ★ como usar o painel administrativo
+│   ├── NOTA-FISCAL.md      # nota fiscal explicada de forma simples
 │   ├── GUIA-DE-EDICAO.md   # como mudar cada coisa do site (à mão)
 │   ├── PRODUTOS.md         # cadastrar produtos e fotos
 │   ├── PAGAMENTOS-FUTURO.md# plano para cobrar pelo site
@@ -174,7 +176,7 @@ node --test tests/*.test.js
 Se você errar algo ao editar um produto, o teste diz qual produto e o que está errado. Eles também rodam sozinhos no GitHub (aba **Actions**).
 
 ## 📊 Status
-Versão 1.2.0 pronta para uso — faltam os dados reais da loja (veja o checklist acima). Histórico no [CHANGELOG](CHANGELOG.md).
+Versão 1.3.0 pronta para uso — faltam os dados reais da loja (veja o checklist acima). Histórico no [CHANGELOG](CHANGELOG.md).
 
 ## 🔮 Próximas melhorias
 - [ ] Fotos reais dos produtos

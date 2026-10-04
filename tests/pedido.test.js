@@ -196,3 +196,50 @@ test("catálogo real: mensagem não expõe o endereço provisório do GitHub", (
   const msg = PD.mensagemPedido(PD.montarPedido(d, PRODUTOS_REAL, LOJA_REAL), LOJA_REAL);
   assert.doesNotMatch(msg, /github/i);
 });
+
+test("CPF e CNPJ: confere dígitos verificadores e formata", () => {
+  assert.equal(PD.validarDocumento("529.982.247-25"), true);
+  assert.equal(PD.validarDocumento("529.982.247-24"), false);
+  assert.equal(PD.validarDocumento("111.111.111-11"), false);
+  assert.equal(PD.validarDocumento("11.222.333/0001-81"), true);
+  assert.equal(PD.validarDocumento("11.222.333/0001-80"), false);
+  assert.equal(PD.validarDocumento("123"), false);
+  assert.equal(PD.formatarDocumento("52998224725"), "529.982.247-25");
+  assert.equal(PD.formatarDocumento("11222333000181"), "11.222.333/0001-81");
+});
+
+test("nota fiscal: pede documento válido, razão social (CNPJ) e endereço mesmo na retirada", () => {
+  const d = dadosValidos();
+  d.entrega = "retirada";
+  d.endereco = {};
+  d.notaFiscal = { quer: true, documento: "123", razaoSocial: "" };
+  let e = PD.validarPedido(d, LOJA);
+  assert.ok(e.nf_doc && e.cep && e.rua, JSON.stringify(e));
+  d.notaFiscal.documento = "11222333000181";
+  e = PD.validarPedido(d, LOJA);
+  assert.ok(e.nf_razao);
+  d.notaFiscal.razaoSocial = "Empresa Exemplo LTDA";
+  d.endereco = dadosValidos().endereco;
+  igual(PD.validarPedido(d, LOJA), {});
+});
+
+test("nota fiscal: bloco pronto na mensagem do WhatsApp", () => {
+  const d = dadosValidos();
+  d.entrega = "retirada";
+  d.notaFiscal = { quer: true, documento: "52998224725", razaoSocial: "" };
+  const msg = PD.mensagemPedido(PD.montarPedido(d, PRODUTOS, LOJA), LOJA);
+  assert.match(msg, /\*NOTA FISCAL: SIM\*\nCPF: 529\.982\.247-25\nNome: Fulano de Tal\nPraça da Sé, 100\nSé - São Paulo\/SP\nCEP 01001-000\nValor dos produtos na nota: R\$ 322,81 \(já com desconto Pix\)/);
+  // retirada: o endereço vai só no bloco da nota, não na entrega
+  assert.match(msg, /\*ENTREGA\*\nRetirar na loja física\n\n\*PAGAMENTO\*/);
+});
+
+test("nota fiscal: sem pedido de nota, a mensagem avisa e não pede documento", () => {
+  const msg = PD.mensagemPedido(PD.montarPedido(dadosValidos(), PRODUTOS, LOJA), LOJA);
+  assert.match(msg, /Nota fiscal: não solicitada/);
+  const loja = JSON.parse(JSON.stringify(LOJA));
+  loja.pedidos.notaFiscal = false;
+  const d = dadosValidos();
+  d.notaFiscal = { quer: true, documento: "123" };
+  igual(PD.validarPedido(d, loja), {});
+  assert.doesNotMatch(PD.mensagemPedido(PD.montarPedido(d, PRODUTOS, loja), loja), /Nota fiscal/i);
+});

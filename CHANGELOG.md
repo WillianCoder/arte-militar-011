@@ -4,6 +4,15 @@ Formato: [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) · Versões
 
 ## [Não lançado]
 
+## [1.3.0] - 2026-10-04
+### Adicionado
+- Opção "Quero nota fiscal" no pedido: CPF/CNPJ com verificação dos dígitos, razão social para CNPJ e endereço obrigatório; bloco **NOTA FISCAL** pronto na mensagem do WhatsApp. Liga/desliga no painel.
+- `docs/NOTA-FISCAL.md`: o que é preciso para emitir nota e o caminho para emissão automática.
+
+### Alterado
+- A mensagem do WhatsApp não leva mais links do site (o endereço provisório não aparece para o cliente). Opção `linkDosProdutos` no painel para religar com domínio próprio.
+- Texto de privacidade menciona CPF/CNPJ.
+
 ## [1.2.0] - 2026-10-04
 ### Adicionado
 - **Painel administrativo** em `site/admin/`: produtos (com upload e compressão de fotos), banners, categorias, contatos/WhatsApp, loja física, entregas e pagamentos, cores e textos. Rascunho automático, prévia do site, validação antes de publicar, publicação em um único commit pelo GitHub e aviso quando já está no ar.

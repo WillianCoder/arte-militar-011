@@ -930,6 +930,15 @@
       campo("email", "E-mail (opcional)", cli.email, 'type="email" autocomplete="email"') +
       "</div></section>" +
 
+      (P.notaFiscal === false ? "" :
+        '<section class="bloco"><h2>' + icone("lista") + "Nota fiscal</h2>" +
+        '<label class="caixa"><input type="checkbox" name="nf" id="f-nf"' + (cli.nf ? " checked" : "") + "> Quero nota fiscal desta compra</label>" +
+        '<div class="campos" id="campos-nf" hidden>' +
+        campo("nf_doc", "CPF ou CNPJ *", cli.nfDoc, 'inputmode="numeric" placeholder="000.000.000-00" maxlength="18"') +
+        campo("nf_razao", "Razão social (empresa) *", cli.nfRazao, 'autocomplete="organization"', "campo--razao") +
+        '<p class="dica campo--largo">Para a nota, precisamos também do endereço completo (aparece logo abaixo, em Entrega).</p>' +
+        "</div></section>") +
+
       '<section class="bloco"><h2>' + icone("caminhao") + "Entrega</h2>" +
       '<div class="opcoes-card" role="radiogroup" aria-label="Forma de entrega">' +
       P.entregas.map(function (e) { return radio("entrega", e.id, e.nome, e.detalhe, cli.entrega === e.id); }).join("") +
@@ -1017,8 +1026,26 @@
 
     function mostrarEndereco() {
       var ent = (form.querySelector('[name="entrega"]:checked') || {}).value;
-      $("#campos-endereco").hidden = !ent || ent === "retirada";
+      var nf = $("#f-nf") && $("#f-nf").checked;
+      $("#campos-endereco").hidden = !nf && (!ent || ent === "retirada");
+      if ($("#campos-nf")) {
+        $("#campos-nf").hidden = !nf;
+        var cnpj = PD.somenteDigitos($("#f-nf_doc").value).length > 11;
+        $(".campo--razao", form).hidden = !cnpj;
+      }
       atualizarResumo();
+    }
+    var caixaNf = $("#f-nf");
+    if (caixaNf) {
+      caixaNf.addEventListener("change", mostrarEndereco);
+      var docNf = $("#f-nf_doc");
+      docNf.addEventListener("input", function () {
+        var d = PD.somenteDigitos(docNf.value).slice(0, 14);
+        docNf.value = d.length <= 11
+          ? d.replace(/(\d{3})(\d)/, "$1.$2").replace(/(\d{3})(\d)/, "$1.$2").replace(/(\d{3})(\d{1,2})$/, "$1-$2")
+          : d.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{0,2})/, "$1.$2.$3/$4-$5");
+        mostrarEndereco();
+      });
     }
 
     $$('[name="entrega"]', form).forEach(function (r) { r.addEventListener("change", mostrarEndereco); });
@@ -1123,7 +1150,8 @@
       entrega: marcado("entrega"),
       pagamento: marcado("pagamento"),
       endereco: { cep: val("cep"), rua: val("rua"), numero: val("numero"), complemento: val("complemento"), bairro: val("bairro"), cidade: val("cidade"), uf: val("uf") },
-      observacoes: val("obs")
+      observacoes: val("obs"),
+      notaFiscal: { quer: !!(form.querySelector('[name="nf"]') || {}).checked, documento: val("nf_doc"), razaoSocial: val("nf_razao") }
     };
   }
 
@@ -1157,7 +1185,7 @@
     }
 
     if ($("#lembrar").checked) {
-      armazenamento.gravar(CHAVE_CLIENTE, { nome: dados.cliente.nome, telefone: dados.cliente.telefone, email: dados.cliente.email, entrega: dados.entrega, pagamento: dados.pagamento, endereco: dados.endereco });
+      armazenamento.gravar(CHAVE_CLIENTE, { nome: dados.cliente.nome, telefone: dados.cliente.telefone, email: dados.cliente.email, entrega: dados.entrega, pagamento: dados.pagamento, endereco: dados.endereco, nf: dados.notaFiscal.quer, nfDoc: dados.notaFiscal.documento, nfRazao: dados.notaFiscal.razaoSocial });
     } else {
       armazenamento.apagar(CHAVE_CLIENTE);
     }
@@ -1230,7 +1258,8 @@
       "<div><dt>Frete</dt><dd>" + (retirada ? "Grátis (retirada)" : "A combinar") + "</dd></div>" +
       '<div class="resumo__total"><dt>Total</dt><dd>' + R(pedido.total) + "</dd></div>" +
       "</dl>" +
-      '<p class="dica">Entrega: ' + esc(pedido.entrega ? pedido.entrega.nome : "-") + " · Pagamento: " + esc(pedido.pagamento || "-") + "</p>" +
+      '<p class="dica">Entrega: ' + esc(pedido.entrega ? pedido.entrega.nome : "-") + " · Pagamento: " + esc(pedido.pagamento || "-") +
+      (pedido.notaFiscal ? " · Nota fiscal: " + esc(pedido.notaFiscal.tipo) + " " + esc(pedido.notaFiscal.documento) : "") + "</p>" +
       "</section>"
     );
   }

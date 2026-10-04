@@ -539,7 +539,7 @@ select:focus, .campo input:focus, .campo textarea:focus { border-color: var(--co
 .dica { font-size: 13px; color: var(--texto-fraco); align-self: end; padding-bottom: 12px; }
 .bloco .dica { margin-bottom: 10px; }
 .dica a { color: var(--coyote); text-decoration: underline; }
-#campos-endereco { margin-top: 16px; }
+#campos-endereco, #campos-nf { margin-top: 16px; }
 
 .opcoes-card { display: grid; gap: 10px; }
 .opcoes-card--linha { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); margin-bottom: 16px; }

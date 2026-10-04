@@ -78,6 +78,7 @@ window.LOJA = {
     ],
     "descontoPix": 5,
     "linkDosProdutos": false,
+    "notaFiscal": true,
     "avisoTopo": "Enviamos para todo o Brasil • Retire grátis na loja física • Pedidos pelo WhatsApp"
   },
   "banners": [
@@ -298,6 +299,6 @@ window.LOJA = {
     "Para pedir troca, chame no WhatsApp com o número do pedido e fotos do produto.",
     "Compras feitas à distância podem ser devolvidas em até 7 dias (art. 49 do Código de Defesa do Consumidor)."
   ],
-  "privacidade": "Os dados preenchidos no pedido (nome, telefone e endereço) são enviados apenas para o nosso WhatsApp, para separar e entregar a sua compra. O site não armazena seus dados em servidores: o carrinho e o histórico ficam somente no seu navegador.",
+  "privacidade": "Os dados preenchidos no pedido (nome, telefone, endereço e, se você pedir nota fiscal, CPF ou CNPJ) são enviados apenas para o nosso WhatsApp, para separar, entregar e emitir a nota da sua compra. O site não armazena seus dados em servidores: o carrinho e o histórico ficam somente no seu navegador.",
   "urlSite": "https://williancoder.github.io/arte-militar-011/"
 };

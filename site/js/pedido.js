@@ -34,6 +34,40 @@
     return String(texto || "").replace(/\D/g, "");
   }
 
+  /* CPF (11 dígitos) ou CNPJ (14 dígitos), conferindo os dígitos verificadores */
+  function validarDocumento(doc) {
+    var d = somenteDigitos(doc);
+    if (/^(\d)\1+$/.test(d)) return false;
+    var calc = function (base, pesos) {
+      var s = 0;
+      for (var i = 0; i < pesos.length; i++) s += Number(base[i]) * pesos[i];
+      var r = s % 11;
+      return r < 2 ? 0 : 11 - r;
+    };
+    if (d.length === 11) {
+      var d1 = calc(d, [10, 9, 8, 7, 6, 5, 4, 3, 2]);
+      var d2 = calc(d, [11, 10, 9, 8, 7, 6, 5, 4, 3, 2]);
+      return d1 === Number(d[9]) && d2 === Number(d[10]);
+    }
+    if (d.length === 14) {
+      var c1 = calc(d, [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2]);
+      var c2 = calc(d, [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2]);
+      return c1 === Number(d[12]) && c2 === Number(d[13]);
+    }
+    return false;
+  }
+
+  function formatarDocumento(doc) {
+    var d = somenteDigitos(doc);
+    if (d.length === 11) return d.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+    if (d.length === 14) return d.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5");
+    return d;
+  }
+
+  function querNota(dados, config) {
+    return !!(dados.notaFiscal && dados.notaFiscal.quer && !(config.pedidos && config.pedidos.notaFiscal === false));
+  }
+
   function arred(n) {
     return Math.round(n * 100) / 100;
   }
@@ -200,7 +234,14 @@
       frete: null, // a combinar — futuramente calculado aqui
       cliente: dados.cliente || {},
       entrega: entrega,
-      endereco: entrega && entrega.id !== "retirada" ? dados.endereco || {} : null,
+      endereco: (entrega && entrega.id !== "retirada") || querNota(dados, config) ? dados.endereco || {} : null,
+      notaFiscal: querNota(dados, config)
+        ? {
+            tipo: somenteDigitos(dados.notaFiscal.documento).length === 14 ? "CNPJ" : "CPF",
+            documento: formatarDocumento(dados.notaFiscal.documento),
+            nome: somenteDigitos(dados.notaFiscal.documento).length === 14 ? (dados.notaFiscal.razaoSocial || "").trim() : (dados.cliente && dados.cliente.nome) || ""
+          }
+        : null,
       pagamento: dados.pagamento || "",
       observacoes: (dados.observacoes || "").trim()
     };
@@ -216,7 +257,13 @@
     if (!dados.itens || !dados.itens.length) erros.itens = "Seu pedido está vazio.";
     if (!dados.entrega) erros.entrega = "Escolha a forma de entrega.";
     if (!dados.pagamento) erros.pagamento = "Escolha a forma de pagamento.";
-    if (dados.entrega && dados.entrega !== "retirada") {
+    var nota = querNota(dados, config);
+    if (nota) {
+      var doc = somenteDigitos(dados.notaFiscal.documento);
+      if (!validarDocumento(doc)) erros.nf_doc = "CPF ou CNPJ inválido. Confira os números.";
+      else if (doc.length === 14 && !(dados.notaFiscal.razaoSocial || "").trim()) erros.nf_razao = "Informe a razão social da empresa.";
+    }
+    if ((dados.entrega && dados.entrega !== "retirada") || nota) {
       var e = dados.endereco || {};
       if (somenteDigitos(e.cep).length !== 8) erros.cep = "CEP deve ter 8 números.";
       if (!e.rua) erros.rua = "Informe a rua.";
@@ -235,6 +282,14 @@
      resumo e o link de cada produto, para caber no WhatsApp. */
   var SEPARADOR = "------------------------------";
   var LIMITE_LINK = 6000; // tamanho máximo do link do WhatsApp antes de compactar
+
+  function linhasEndereco(e) {
+    return [
+      e.rua + ", " + e.numero + (e.complemento ? " - " + e.complemento : ""),
+      e.bairro + " - " + e.cidade + "/" + String(e.uf || "").toUpperCase(),
+      "CEP " + e.cep
+    ];
+  }
 
   function plural(n, um, varios) { return n + " " + (n === 1 ? um : varios); }
 
@@ -283,14 +338,20 @@
 
     L.push("", "*ENTREGA*");
     L.push(pedido.entrega ? pedido.entrega.nome : "-");
-    if (pedido.endereco) {
-      var e = pedido.endereco;
-      L.push(e.rua + ", " + e.numero + (e.complemento ? " - " + e.complemento : ""));
-      L.push(e.bairro + " - " + e.cidade + "/" + String(e.uf || "").toUpperCase());
-      L.push("CEP " + e.cep);
-    }
+    if (pedido.endereco && !retirada) L.push.apply(L, linhasEndereco(pedido.endereco));
 
     L.push("", "*PAGAMENTO*", pedido.pagamento || "-");
+
+    if (pedido.notaFiscal) {
+      var nf = pedido.notaFiscal;
+      L.push("", "*NOTA FISCAL: SIM*");
+      L.push(nf.tipo + ": " + nf.documento);
+      L.push((nf.tipo === "CNPJ" ? "Razão social: " : "Nome: ") + nf.nome);
+      if (pedido.endereco) L.push.apply(L, linhasEndereco(pedido.endereco));
+      L.push("Valor dos produtos na nota: " + formatarPreco(pedido.total) + (pedido.descontoPix ? " (já com desconto Pix)" : ""));
+    } else if (!(config.pedidos && config.pedidos.notaFiscal === false)) {
+      L.push("", "Nota fiscal: não solicitada");
+    }
     if (pedido.observacoes) L.push("", "*OBSERVAÇÕES*", pedido.observacoes);
 
     L.push("", SEPARADOR);
@@ -332,6 +393,8 @@
     somenteDigitos: somenteDigitos,
     descontoPercentual: descontoPercentual,
     precoPix: precoPix,
+    validarDocumento: validarDocumento,
+    formatarDocumento: formatarDocumento,
     calcularTotais: calcularTotais,
     chaveItem: chaveItem,
     textoVariacoes: textoVariacoes,
