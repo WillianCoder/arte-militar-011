@@ -24,6 +24,7 @@
     "   banners .................. carrossel da página inicial",
     "   categorias ............... menu lateral (id sem acento/espaço + subcategorias)",
     "   cores .................... cores das variações (\"Nome\": \"#código\")",
+    "   tema ..................... cores do site inteiro (paleta + 6 cores) — veja js/tema.js",
     "   sobre, politicaTrocas, privacidade, urlSite",
     "   ===================================================================== */"
   ].join("\n");

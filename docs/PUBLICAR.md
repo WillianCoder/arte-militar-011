@@ -14,23 +14,44 @@ Não precisa fazer nada: editou e salvou na `main` → em ~1 minuto o site atual
 ## Painel administrativo
 Fica em **/admin/** do site (ex.: `https://williancoder.github.io/arte-militar-011/admin/`). Ele publica pelo mesmo caminho: grava no GitHub e o workflow põe no ar. Guia: [PAINEL.md](PAINEL.md).
 
-## Domínio próprio
-Um endereço como `artemilitar011.com.br` passa muito mais confiança:
+## Endereço sem "github" (grátis) e repositório privado
+Objetivo: o cliente vê só `artemilitar011.pages.dev` (ou `artemilitar011.com.br`) e ninguém consegue achar o código. O painel continua funcionando igual.
 
-1. **Registre o domínio** em [registro.br](https://registro.br) (~R$ 40/ano para `.com.br`).
-2. No GitHub: **Settings → Pages → Custom domain** → `www.artemilitar011.com.br` → **Save**.
-3. No **registro.br → DNS** do domínio, crie:
-   | Tipo | Nome | Valor |
-   |---|---|---|
-   | CNAME | `www` | `williancoder.github.io` |
-   | A | *(vazio)* | `185.199.108.153` |
-   | A | *(vazio)* | `185.199.109.153` |
-   | A | *(vazio)* | `185.199.110.153` |
-   | A | *(vazio)* | `185.199.111.153` |
-4. Espere o DNS propagar (de minutos a 24 h) e marque **Enforce HTTPS** em Settings → Pages.
-5. Atualize no projeto: `urlSite` no `config.js` e o `og:image` no `index.html` com o novo endereço.
+**1. Conta grátis na Cloudflare** → https://dash.cloudflare.com/sign-up
 
-Alternativas gratuitas equivalentes: **Cloudflare Pages** e **Netlify** (apontando para a pasta `site/`).
+**2. Criar o site ligado a este repositório** (passo a passo oficial: https://developers.cloudflare.com/pages/get-started/git-integration/)
+- No painel da Cloudflare: **Workers & Pages → Create → Pages → Connect to Git**.
+- Escolha **GitHub**, autorize e marque **Only select repositories → `arte-militar-011`** (só este).
+- Configure assim:
+  | Campo | Valor |
+  |---|---|
+  | Project name | `artemilitar011` (vira `artemilitar011.pages.dev`) |
+  | Production branch | `main` |
+  | Framework preset | `None` |
+  | Build command | *(deixe vazio)* |
+  | Build output directory | `site` |
+- **Save and Deploy**. Em ~1 minuto o site está no ar no endereço novo. Cada publicação do painel atualiza sozinha.
+
+**3. Trocar os links do site para o endereço novo**: `urlSite` (Painel → Textos → Endereço do site) e o `og:image` no topo do `site/index.html` (precisa do endereço completo).
+
+**4. Desligar o endereço antigo do GitHub**: https://github.com/WillianCoder/arte-militar-011/settings/pages → **Unpublish site**. Depois apague o arquivo `.github/workflows/pages.yml` (os testes continuam no `testes.yml`).
+
+**5. Deixar o repositório privado**: https://github.com/WillianCoder/arte-militar-011/settings → fim da página (**Danger Zone**) → **Change visibility → Make private**.
+- O painel continua funcionando (a chave de acesso já é deste repositório).
+- A Cloudflare continua publicando (ela tem acesso pelo passo 2).
+- Ajuda oficial: https://docs.github.com/pt/repositories/managing-your-repositorys-settings-and-features/managing-repository-settings/setting-repository-visibility
+
+> Ordem importa: primeiro a Cloudflare no ar (passo 2), depois privado (passo 5). No plano grátis do GitHub, repositório privado não publica no GitHub Pages, então fazendo ao contrário o site sai do ar até a Cloudflare entrar.
+
+### Domínio próprio `.com.br` (opcional, cerca de R$ 40 por ano)
+É o domínio mais barato que passa confiança no Brasil. Um `.com` sai mais caro (perto de US$ 10 por ano).
+1. Registre em https://registro.br (precisa de CPF ou CNPJ; pode estar no nome do dono da loja).
+2. No projeto da Cloudflare: **Custom domains → Set up a custom domain** → `artemilitar011.com.br`. A Cloudflare vai pedir para adicionar o domínio na conta (plano **Free**) e mostrar **2 servidores DNS** (ex.: `xxx.ns.cloudflare.com`). Guia: https://developers.cloudflare.com/pages/configuration/custom-domains/
+3. No registro.br: **seu domínio → DNS → Alterar servidores DNS** → cole os 2 servidores da Cloudflare → salvar.
+4. Espere a ativação (de minutos a algumas horas). O cadeado (HTTPS) vem sozinho.
+5. Troque `urlSite` e `og:image` para `https://artemilitar011.com.br/`.
+
+**Bônus grátis:** e-mail `contato@artemilitar011.com.br` que chega no Gmail da loja, pelo **Email Routing** da Cloudflare: https://developers.cloudflare.com/email-routing/get-started/
 
 ## Google e prévia do link
 - **Título e descrição no Google:** no topo do `site/index.html` (`<title>` e `<meta name="description">`). Cada página do site também troca o título da aba sozinha.

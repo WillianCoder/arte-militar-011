@@ -43,7 +43,7 @@ O caminho mais fácil para tudo abaixo é o [painel](docs/PAINEL.md). A tabela m
 | Banners da página inicial | `site/js/config.js` → `banners` | [Guia de edição](docs/GUIA-DE-EDICAO.md#4-banners-da-página-inicial) |
 | Entregas, pagamentos, desconto Pix, aviso do topo | `site/js/config.js` → `pedidos` | [Guia de edição](docs/GUIA-DE-EDICAO.md#3-pedidos-entrega-pagamento-e-pix) |
 | Textos "Sobre", trocas e privacidade | `site/js/config.js` (final do arquivo) | [Guia de edição](docs/GUIA-DE-EDICAO.md#7-textos-institucionais) |
-| Cores do site | `site/css/estilo.css` → bloco `:root` | [Guia de edição](docs/GUIA-DE-EDICAO.md#8-cores-e-fontes) |
+| Cores do site (8 paletas prontas) | Painel → Cores do site · `site/js/tema.js` | [Guia de edição](docs/GUIA-DE-EDICAO.md#8-cores-do-site-paletas-e-fontes) |
 | Título no Google / prévia no WhatsApp | `site/index.html` (topo) | [Publicar](docs/PUBLICAR.md#google-e-prévia-do-link) |
 | 📄 Apresentação para o cliente (PDF) | — | [Apresentação](docs/Apresentacao-Arte-Militar-011.pdf) |
 | ✅ O que falta antes de mostrar ao cliente | — | [Checklist de lançamento](docs/CHECKLIST-LANCAMENTO.md) |

@@ -27,8 +27,10 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Oswald:wght@500;600;700&display=swap">
   <link rel="stylesheet" href="css/estilo.css">
 
-  <!-- Ordem importa: dados primeiro, depois a lógica e por último a tela -->
-  <script src="js/config.js" defer></script>
+  <!-- Ordem importa: dados primeiro, depois a lógica e por último a tela.
+       config.js e tema.js sem "defer": pintam as cores da paleta antes de a página aparecer -->
+  <script src="js/config.js"></script>
+  <script src="js/tema.js"></script>
   <script src="js/produtos.js" defer></script>
   <script src="js/ilustracoes.js" defer></script>
   <script src="js/pedido.js" defer></script>

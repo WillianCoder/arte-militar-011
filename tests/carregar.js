@@ -10,7 +10,7 @@ function carregarSite() {
   contexto.window = contexto;
   contexto.globalThis = contexto;
   vm.createContext(contexto);
-  for (const arquivo of ["config.js", "produtos.js", "ilustracoes.js", "pedido.js", "validar.js", "serializar.js"]) {
+  for (const arquivo of ["config.js", "tema.js", "produtos.js", "ilustracoes.js", "pedido.js", "validar.js", "serializar.js"]) {
     const codigo = fs.readFileSync(path.join(PASTA_SITE, "js", arquivo), "utf8");
     vm.runInContext(codigo, contexto, { filename: arquivo });
   }

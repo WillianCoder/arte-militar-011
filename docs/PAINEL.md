@@ -13,7 +13,8 @@ O painel é onde você edita **tudo** do site sem mexer em código:
 | **Categorias** | renomear, mudar ícone e ordem do menu lateral, criar categorias e subcategorias |
 | **Loja e contatos** | **WhatsApp que recebe os pedidos**, telefone, e-mail, redes sociais, endereço, mapa e horários |
 | **Pedidos e pagamento** | desconto no Pix, faixa de aviso do topo, formas de entrega e de pagamento |
-| **Cores** | cores que você pode marcar nos produtos |
+| **Cores do site** | **paletas prontas** para trocar as cores do site inteiro (tudo combina sozinho), com miniatura de cada uma e ajuste fino |
+| **Cores dos produtos** | cores que você pode marcar nos produtos (Preto, Coyote, Multicam...) |
 | **Textos** | sobre a loja, política de trocas, privacidade, descrição para o Google |
 
 ## Primeiro acesso: a chave (uma vez só)

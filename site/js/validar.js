@@ -29,6 +29,14 @@
     if (!(ped.pagamentos || []).length) erro("Pedidos", "Cadastre ao menos uma forma de pagamento.");
     if (typeof ped.descontoPix !== "number" || ped.descontoPix < 0 || ped.descontoPix > 90) erro("Pedidos", "Desconto Pix deve ser um número entre 0 e 90.");
 
+    // cores do site (sem "tema" o site usa a paleta padrão)
+    if (loja.tema) {
+      var tc = loja.tema.cores || {};
+      ["fundo", "superficie", "texto", "destaque", "apoio", "oferta"].forEach(function (k) {
+        if (!/^#[0-9a-f]{6}$/i.test(tc[k] || "")) erro("Cores do site", "Cor \"" + k + "\" inválida: use o formato #RRGGBB.");
+      });
+    }
+
     // categorias
     var cats = {};
     (loja.categorias || []).forEach(function (cat) {

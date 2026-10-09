@@ -12,6 +12,7 @@
    banners .................. carrossel da página inicial
    categorias ............... menu lateral (id sem acento/espaço + subcategorias)
    cores .................... cores das variações ("Nome": "#código")
+   tema ..................... cores do site inteiro (paleta + 6 cores) — veja js/tema.js
    sobre, politicaTrocas, privacidade, urlSite
    ===================================================================== */
 
@@ -291,6 +292,17 @@ window.LOJA = {
     "Camuflado Urbano": "camo-urbano",
     "Prata": "#a9adb0",
     "Vermelho": "#8e2a23"
+  },
+  "tema": {
+    "paleta": "militar",
+    "cores": {
+      "fundo": "#0d0f0b",
+      "superficie": "#161a12",
+      "texto": "#ece8da",
+      "destaque": "#c9a46a",
+      "apoio": "#6f8240",
+      "oferta": "#c4452f"
+    }
   },
   "sobre": "A Arte Militar 011 nasceu em São Paulo para atender militares, policiais, vigilantes, praticantes de airsoft, colecionadores e aventureiros. Trabalhamos com artigos selecionados, atendimento direto e preço justo — na loja física ou com envio para todo o Brasil.",
   "politicaTrocas": [

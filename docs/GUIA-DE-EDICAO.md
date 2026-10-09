@@ -135,30 +135,42 @@ cores: {
   ...
 }
 ```
+Estas são as cores **dos produtos** (o cliente escolhe "Preto", "Coyote"...). As cores **do site** ficam no item 8.
+
 Toda cor usada em `variacoes: { "Cor": [...] }` de um produto precisa existir aqui (o nome tem que ser **idêntico**, com maiúsculas e acentos). Para criar uma cor: `"Vinho": "#5a1f2b",` — pegue o código em [htmlcolorcodes.com](https://htmlcolorcodes.com/pt/).
 
 ## 7. Textos institucionais
 No final do `config.js`: `sobre`, `politicaTrocas` (lista de frases), `privacidade` e `descricao` (aparece no rodapé e no Google). O `urlSite` é o endereço público do site — troque quando tiver domínio próprio.
 
-## 8. Cores e fontes
-No topo de [`site/css/estilo.css`](../site/css/estilo.css):
-```css
-:root {
-  --fundo: #0d0f0b;        /* fundo geral */
-  --coyote: #c9a46a;       /* cor principal: botões, títulos, detalhes */
-  --coyote-forte: #e0bd80; /* cor principal ao passar o mouse */
-  --oliva: #6f8240;        /* selo "Novo" */
-  --vermelho: #c4452f;     /* ofertas */
-  ...
+## 8. Cores do site (paletas) e fontes
+**Pelo painel → Cores do site.** Há 8 paletas prontas, cada uma com uma miniatura da loja para comparar:
+
+| Paleta | Estilo |
+|---|---|
+| **Militar** (atual) | preto oliva com coyote |
+| **Verde Oliva** | verde de campanha com detalhes em areia |
+| **Deserto** | marrom escuro e caramelo |
+| **Marinha** | azul marinho com dourado |
+| **Black Ops** | preto total com laranja tático |
+| **Urbano** | grafite com vermelho, estilo policial |
+| **Areia Clara** | fundo claro cor de areia com marrom |
+| **Campo Claro** | claro e limpo, com verde oliva |
+
+Escolha uma, clique em **Ver prévia** e depois em **Publicar no site**.
+
+**Ajuste fino:** na mesma tela dá para trocar qualquer uma das 6 cores-base (fundo, cartões, texto, cor principal, cor de apoio, ofertas). O resto (bordas, textos suaves, cor ao passar o mouse, letra em cima dos botões) é **calculado sozinho** a partir delas, por isso tudo continua combinando. Se alguma combinação ficar difícil de ler, o painel avisa na hora.
+
+No arquivo fica assim, em `config.js`:
+```json
+"tema": {
+  "paleta": "marinha",
+  "cores": { "fundo": "#0a0f17", "superficie": "#121b28", "texto": "#e6ebf2",
+             "destaque": "#d6b25a", "apoio": "#5b8ac2", "oferta": "#d24b3e" }
 }
 ```
-Exemplos de temas alternativos:
-| Tema | `--coyote` | `--coyote-forte` |
-|---|---|---|
-| Areia (atual) | `#c9a46a` | `#e0bd80` |
-| Verde tático | `#8fa556` | `#a9c06a` |
-| Laranja resgate | `#d9822b` | `#ee9a45` |
-| Cinza urbano | `#a9b0b5` | `#c8ced2` |
+- As paletas prontas e as contas de cor ficam em [`site/js/tema.js`](../site/js/tema.js). Para criar uma paleta nova, copie um bloco da lista `PALETAS` e troque nome e cores; o teste `tests/tema.test.js` confere se ela é legível.
+- O bloco `:root` do [`site/css/estilo.css`](../site/css/estilo.css) guarda a paleta Militar como reserva (usada se o JavaScript falhar). Não troque cores direto ali: use o painel.
+- O verde do WhatsApp não muda com a paleta (é a cor da marca e as pessoas a reconhecem).
 
 Fontes: títulos em **Oswald** e logo em **Black Ops One** (Google Fonts, linha `fonts.googleapis.com` no `index.html`).
 

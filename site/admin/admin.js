@@ -17,6 +17,7 @@
   var PD = window.PEDIDO;
   var V = window.VALIDAR;
   var S = window.SERIALIZAR;
+  var TM = window.TEMA;
   var R = PD.formatarPreco;
 
   var PASTA = "site"; // pasta do site dentro do repositório
@@ -371,7 +372,8 @@
     ["categorias", "camisa", "Categorias"],
     ["loja", "loja", "Loja e contatos"],
     ["pedidos", "pedido", "Pedidos e pagamento"],
-    ["cores", "tag", "Cores"],
+    ["tema", "paleta", "Cores do site"],
+    ["cores", "tag", "Cores dos produtos"],
     ["textos", "info", "Textos"]
   ];
 
@@ -440,6 +442,7 @@
       categorias: telaCategorias,
       loja: telaLoja,
       pedidos: telaPedidos,
+      tema: telaTema,
       cores: telaCores,
       textos: telaTextos
     }[estado.secao];
@@ -1284,7 +1287,7 @@
   function telaCores() {
     var cores = estado.loja.cores;
     return (
-      cabecalho("Cores", "Cores que você pode marcar nos produtos. Os camuflados são desenhos especiais.",
+      cabecalho("Cores dos produtos", "Cores que você pode marcar nos produtos (ex.: coturno Preto ou Coyote). Os camuflados são desenhos especiais. Para mudar as cores do site, use <b>Cores do site</b>.",
         '<button type="button" class="btn btn--primario" id="nova-cor">' + icone("mais") + "Nova cor</button>") +
       '<section class="bloco"><ul class="adm-subs">' +
       Object.keys(cores).map(function (nome) {
@@ -1324,6 +1327,110 @@
       });
     });
   };
+
+  /* ============================= CORES DO SITE ============================ */
+  function temaAtual() {
+    if (!estado.loja.tema) estado.loja.tema = { paleta: TM.PALETAS[0].id, cores: clonar(TM.PALETAS[0].cores) };
+    return estado.loja.tema;
+  }
+
+  /* Miniatura da loja pintada com o tema: menu, cartão de produto, selos e botão */
+  function miniLoja(tema) {
+    return (
+      '<div class="mini" style="' + esc(TM.estiloInline(tema)) + '" aria-hidden="true">' +
+      '<div class="mini__lateral"><span class="mini__logo">AM 011</span><i></i><i class="ativo"></i><i></i><i></i></div>' +
+      '<div class="mini__principal">' +
+      '<div class="mini__faixa">Envio para todo o Brasil</div>' +
+      '<div class="mini__card">' +
+      '<div class="mini__foto"><span class="mini__selo mini__selo--oferta">Oferta</span><span class="mini__selo mini__selo--novo">Novo</span></div>' +
+      '<div class="mini__nome">Coturno Tático</div><div class="mini__desc">Couro e cano alto</div>' +
+      '<div class="mini__preco">R$ 289,90</div><div class="mini__pix">5% off no Pix</div>' +
+      '<div class="mini__btn">Adicionar</div>' +
+      "</div></div></div>"
+    );
+  }
+
+  function bolinhas(cores) {
+    return '<span class="adm-paleta__cores">' + TM.CAMPOS.map(function (c) {
+      return '<span style="background:' + esc(cores[c[0]]) + '" title="' + esc(c[1]) + '"></span>';
+    }).join("") + "</span>";
+  }
+
+  function resultadoLeitura(tema) {
+    var lista = TM.problemas(tema);
+    return lista.length
+      ? '<div class="alerta"><strong>Atenção, pode ficar difícil de ler:</strong><ul>' + lista.map(function (m) { return "<li>" + esc(m) + "</li>"; }).join("") + "</ul>Dá para publicar assim, mas vale ajustar ou escolher uma paleta pronta.</div>"
+      : '<p class="adm-leitura-ok">' + icone("check") + "Tudo legível: textos, botões, preços e selos com bom contraste.</p>";
+  }
+
+  function telaTema() {
+    var tema = temaAtual();
+    var atual = TM.paletaDasCores(tema.cores);
+    return (
+      cabecalho("Cores do site", "Escolha uma paleta pronta: o site inteiro muda junto (fundo, menu, botões, preços, selos e avisos) e tudo continua combinando. O cliente só vê depois de <b>Publicar no site</b>.") +
+      '<section class="bloco"><h2>' + icone("paleta") + "Paletas prontas</h2>" +
+      '<div class="adm-paletas">' +
+      TM.PALETAS.map(function (p) {
+        var emUso = atual && atual.id === p.id;
+        return '<article class="adm-paleta' + (emUso ? " adm-paleta--ativa" : "") + '">' +
+          miniLoja({ cores: p.cores }) +
+          '<div class="adm-paleta__info"><div class="adm-paleta__titulo"><strong>' + esc(p.nome) + "</strong>" + bolinhas(p.cores) + "</div>" +
+          "<p>" + esc(p.descricao) + "</p>" +
+          (emUso
+            ? '<span class="adm-tag adm-tag--ok">' + icone("check") + "Em uso</span>"
+            : '<button type="button" class="btn btn--secundario" data-paleta="' + esc(p.id) + '">Usar esta paleta</button>') +
+          "</div></article>";
+      }).join("") +
+      "</div></section>" +
+      '<fieldset class="bloco"><legend>' + icone("filtro") + "Ajuste fino" + (atual ? "" : ' <span class="adm-tag">personalizada</span>') + "</legend>" +
+      '<p class="dica">Quer mudar só uma cor (por exemplo, a cor principal para a cor da logo)? Mexa aqui. Os outros tons (bordas, textos suaves, letras dos botões) se ajustam sozinhos.</p>' +
+      '<div class="adm-ajuste">' +
+      '<div class="adm-ajuste__campos">' +
+      TM.CAMPOS.map(function (c) {
+        return '<label class="adm-cor-campo"><input type="color" data-tema-cor="' + c[0] + '" value="' + esc(tema.cores[c[0]]) + '">' +
+          "<span><strong>" + esc(c[1]) + "</strong><small>" + esc(c[2]) + "</small></span></label>";
+      }).join("") +
+      "</div>" +
+      '<div class="adm-ajuste__previa"><div id="tema-mini">' + miniLoja(tema) + '</div><div id="tema-leitura">' + resultadoLeitura(tema) + "</div>" +
+      '<button type="button" class="btn btn--secundario btn--bloco" id="tema-previa">' + icone("busca") + "Ver no site inteiro (prévia)</button></div>" +
+      "</div></fieldset>"
+    );
+  }
+
+  ligacoes.tema = function (raiz) {
+    var tema = temaAtual();
+    $$("[data-paleta]", raiz).forEach(function (b) {
+      b.addEventListener("click", function () {
+        var p = TM.paleta(b.dataset.paleta);
+        estado.loja.tema = { paleta: p.id, cores: clonar(p.cores) };
+        marcarMudanca("Cores do site: " + p.nome);
+        renderizarNoLugar();
+        aviso("Paleta <b>" + esc(p.nome) + "</b> escolhida. Veja na prévia e depois publique.");
+      });
+    });
+    $$("[data-tema-cor]", raiz).forEach(function (inp) {
+      // "input" atualiza a miniatura enquanto arrasta; "change" grava no rascunho ao soltar
+      inp.addEventListener("input", function () {
+        tema.cores[inp.dataset.temaCor] = inp.value.toLowerCase();
+        $("#tema-mini", raiz).innerHTML = miniLoja(tema);
+        $("#tema-leitura", raiz).innerHTML = resultadoLeitura(tema);
+      });
+      inp.addEventListener("change", function () {
+        var p = TM.paletaDasCores(tema.cores);
+        tema.paleta = p ? p.id : "personalizada";
+        marcarMudanca("Cores do site: ajuste fino");
+        renderizarNoLugar();
+      });
+    });
+    $("#tema-previa", raiz).addEventListener("click", abrirPrevia);
+  };
+
+  /* redesenha a tela sem pular para o topo */
+  function renderizarNoLugar() {
+    var y = window.scrollY;
+    renderizar();
+    window.scrollTo(0, y);
+  }
 
   /* ================================= TEXTOS =============================== */
   function telaTextos() {

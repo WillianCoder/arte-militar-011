@@ -28,6 +28,7 @@
       if (previa && previa.loja && previa.produtos) {
         window.LOJA = previa.loja;
         window.PRODUTOS = previa.produtos;
+        if (window.TEMA) window.TEMA.aplicar(previa.loja.tema);
       }
     } catch (e) { /* sem prévia: mostra o site normal */ }
   }
@@ -260,9 +261,9 @@
   /* ============================ painel lateral ============================ */
   var EMBLEMA =
     '<svg class="emblema" viewBox="0 0 64 64" aria-hidden="true">' +
-    '<path d="M32 3L58 12V30C58 46 46 57 32 61C18 57 6 46 6 30V12Z" fill="#2c3320" stroke="#c9a46a" stroke-width="3"/>' +
-    '<path d="M32 15L35.6 25.6H46.8L37.7 32.2L41.2 42.8L32 36.2L22.8 42.8L26.3 32.2L17.2 25.6H28.4Z" fill="#c9a46a"/>' +
-    '<path d="M14 48H50" stroke="#c9a46a" stroke-width="2.5"/></svg>';
+    '<path d="M32 3L58 12V30C58 46 46 57 32 61C18 57 6 46 6 30V12Z" style="fill:var(--linha);stroke:var(--coyote)" stroke-width="3"/>' +
+    '<path d="M32 15L35.6 25.6H46.8L37.7 32.2L41.2 42.8L32 36.2L22.8 42.8L26.3 32.2L17.2 25.6H28.4Z" style="fill:var(--coyote)"/>' +
+    '<path d="M14 48H50" style="stroke:var(--coyote)" stroke-width="2.5"/></svg>';
 
   function logoHtml() {
     return EMBLEMA + '<span class="logo__texto"><span class="logo__nome">Arte Militar</span><span class="logo__num">011</span></span>';
@@ -493,7 +494,7 @@
     meta.titulo = "";
     var banners = LOJA.banners || [];
     var slides = banners.map(function (b, i) {
-      var fundo = b.imagem ? ' style="background-image:linear-gradient(90deg,rgba(10,12,8,.92) 0%,rgba(10,12,8,.6) 55%,rgba(10,12,8,.25) 100%),url(\'' + esc(b.imagem) + '\')"' : "";
+      var fundo = b.imagem ? ' style="background-image:linear-gradient(90deg,rgba(var(--fundo-rgb),.92) 0%,rgba(var(--fundo-rgb),.6) 55%,rgba(var(--fundo-rgb),.25) 100%),url(\'' + esc(b.imagem) + '\')"' : "";
       var Tag = i === 0 ? "h1" : "h2";
       return (
         '<article class="hero__slide' + (i === 0 ? " ativo" : "") + (b.imagem ? " hero__slide--foto" : "") + '"' + fundo + ' aria-roledescription="slide" aria-label="' + (i + 1) + " de " + banners.length + '"' + (i === 0 ? "" : ' aria-hidden="true"') + ">" +
