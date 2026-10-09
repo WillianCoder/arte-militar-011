@@ -28,7 +28,7 @@
       if (previa && previa.loja && previa.produtos) {
         window.LOJA = previa.loja;
         window.PRODUTOS = previa.produtos;
-        if (window.TEMA) window.TEMA.aplicar(previa.loja.tema);
+        if (window.TEMA && !window.TEMA.amostra) window.TEMA.aplicar(previa.loja.tema);
       }
     } catch (e) { /* sem prévia: mostra o site normal */ }
   }
@@ -1596,8 +1596,10 @@
     $("#sombra").addEventListener("click", fecharMenu);
     document.addEventListener("keydown", function (e) { if (e.key === "Escape") fecharMenu(); });
 
-    var aviso = EM_PREVIA ? "PRÉVIA DO PAINEL — alterações ainda não publicadas. Clientes não veem esta versão." : LOJA.pedidos.avisoTopo;
-    if (EM_PREVIA) $("#aviso-topo").classList.add("aviso-topo--previa");
+    var amostra = window.TEMA && window.TEMA.amostra;
+    var aviso = EM_PREVIA ? "PRÉVIA DO PAINEL — alterações ainda não publicadas. Clientes não veem esta versão." :
+      amostra ? "Amostra de cores: paleta " + amostra.nome + ". Escolha a paleta da loja no painel." : LOJA.pedidos.avisoTopo;
+    if (EM_PREVIA || amostra) $("#aviso-topo").classList.add("aviso-topo--previa");
     if (aviso) {
       $("#aviso-topo").textContent = aviso;
       $("#aviso-topo").hidden = false;

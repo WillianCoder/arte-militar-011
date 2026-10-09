@@ -91,3 +91,11 @@ test("estilo.css: cores fixas só onde não devem mudar com a paleta", () => {
     .filter((c) => !/rgba\(0, 0, 0|rgba\(37, 211, 102/.test(c));
   assert.deepEqual(rgbaFixas, [], "use rgba(var(--destaque-rgb), .x) e afins");
 });
+
+test("link de amostra (?paleta=) só aceita paletas que existem", () => {
+  assert.equal(T.paletaDoEndereco("?paleta=marinha").id, "marinha");
+  assert.equal(T.paletaDoEndereco("?previa=1&paleta=Areia-Clara").id, "areia-clara");
+  assert.equal(T.paletaDoEndereco("?paleta=inexistente"), null);
+  assert.equal(T.paletaDoEndereco(""), null);
+  assert.equal(T.amostra, null);
+});

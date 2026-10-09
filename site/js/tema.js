@@ -234,10 +234,20 @@
     return null;
   }
 
+  /* Link de amostra: site.com/?paleta=marinha mostra o site com outra paleta
+     só para quem abriu o link (não muda nada do site publicado) */
+  function paletaDoEndereco(busca) {
+    var m = /[?&]paleta=([a-z0-9-]+)/i.exec(busca || "");
+    return m ? paleta(m[1].toLowerCase()) : null;
+  }
+  var amostra = raiz.location ? paletaDoEndereco(raiz.location.search) : null;
+
   raiz.TEMA = {
     CAMPOS: CAMPOS,
     PALETAS: PALETAS,
     paleta: paleta,
+    paletaDoEndereco: paletaDoEndereco,
+    amostra: amostra,
     paletaDasCores: function (cores) { return paletaDasCores(normalizar({ cores: cores })); },
     hexValido: hexValido,
     contraste: contraste,
@@ -249,5 +259,5 @@
   };
 
   // pinta já, antes de a página aparecer (evita piscar com as cores antigas)
-  if (raiz.document && raiz.LOJA) aplicar(raiz.LOJA.tema);
+  if (raiz.document && raiz.LOJA) aplicar(amostra ? { cores: amostra.cores } : raiz.LOJA.tema);
 })(typeof window !== "undefined" ? window : globalThis);

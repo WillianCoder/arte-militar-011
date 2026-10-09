@@ -158,6 +158,8 @@ No final do `config.js`: `sobre`, `politicaTrocas` (lista de frases), `privacida
 
 Escolha uma, clique em **Ver prévia** e depois em **Publicar no site**.
 
+**Link de amostra (para mostrar a um cliente):** acrescente `?paleta=` + nome ao endereço, por exemplo `<endereço do site>/?paleta=marinha`. Mostra o site inteiro naquela paleta só para quem abriu o link, com um aviso no topo. Nomes: `militar`, `verde-oliva`, `deserto`, `marinha`, `black-ops`, `urbano`, `areia-clara`, `campo-claro`.
+
 **Ajuste fino:** na mesma tela dá para trocar qualquer uma das 6 cores-base (fundo, cartões, texto, cor principal, cor de apoio, ofertas). O resto (bordas, textos suaves, cor ao passar o mouse, letra em cima dos botões) é **calculado sozinho** a partir delas, por isso tudo continua combinando. Se alguma combinação ficar difícil de ler, o painel avisa na hora.
 
 No arquivo fica assim, em `config.js`:
